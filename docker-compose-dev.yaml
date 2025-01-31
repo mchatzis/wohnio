@@ -29,7 +29,7 @@ services:
     container_name: nest-api
     build:
       context: ./weather-app
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     ports:
       - "3000:3000"
     environment:

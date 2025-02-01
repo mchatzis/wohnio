@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { UpdateLocationDto } from '../dto/update-location.dto';
-import { LocationsService } from '../services/location.service';
+import { LocationService } from '../services/location.service';
 
-@Controller('locations')
-export class LocationsController {
-  constructor(private readonly locationsService: LocationsService) { }
+@Controller('location')
+export class LocationController {
+  constructor(private readonly locationsService: LocationService) { }
 
   @Post()
   create(@Body() createLocationDto: CreateLocationDto) {

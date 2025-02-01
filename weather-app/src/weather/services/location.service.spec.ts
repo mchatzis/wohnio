@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { LocationRepository } from '../repositories/location.repository';
-import { LocationsService } from './location.service';
+import { LocationService } from './location.service';
 
 jest.mock('../repositories/location.repository');
 
-describe('LocationsService', () => {
-  let service: LocationsService;
+describe('LocationService', () => {
+  let service: LocationService;
   let repository: LocationRepository;
 
   const mockLocation = {
@@ -24,10 +24,10 @@ describe('LocationsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LocationRepository, LocationsService],
+      providers: [LocationRepository, LocationService],
     }).compile();
 
-    service = module.get<LocationsService>(LocationsService);
+    service = module.get<LocationService>(LocationService);
     repository = module.get<LocationRepository>(LocationRepository);
   });
 

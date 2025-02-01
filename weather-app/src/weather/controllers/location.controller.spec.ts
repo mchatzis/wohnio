@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateLocationDto } from '../dto/create-location.dto';
-import { LocationsService } from '../services/location.service';
-import { LocationsController } from './location.controller';
+import { LocationService } from '../services/location.service';
+import { LocationController } from './location.controller';
 
 jest.mock('../services/location.service');
 
-describe('LocationsController', () => {
-  let controller: LocationsController;
-  let service: LocationsService;
+describe('LocationController', () => {
+  let controller: LocationController;
+  let service: LocationService;
 
   const mockLocation = {
     _id: 'someId',
@@ -23,12 +23,12 @@ describe('LocationsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [LocationsController],
-      providers: [LocationsService],
+      controllers: [LocationController],
+      providers: [LocationService],
     }).compile();
 
-    controller = module.get<LocationsController>(LocationsController);
-    service = module.get<LocationsService>(LocationsService);
+    controller = module.get<LocationController>(LocationController);
+    service = module.get<LocationService>(LocationService);
   });
 
   it('should call service.create with correct data', async () => {

@@ -9,7 +9,7 @@ describe('LocationRepository', () => {
 
     const mockLocationCreateInput = {
         location: {
-            geoType: "Point",
+            type: "Point",
             coordinates: [-0.1278, 51.5074]
         },
         name: 'London'

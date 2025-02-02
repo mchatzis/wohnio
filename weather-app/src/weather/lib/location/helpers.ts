@@ -31,7 +31,6 @@ export async function fetchWeatherData({ location, days }: fetchWeatherDataParam
     });
 
     const url = `${baseUrl}?${params.toString()}`;
-    console.log(url)
 
     const weather_data = await fetch(url).then(res => res.json());
     if (!isGeoJSON(weather_data)) {

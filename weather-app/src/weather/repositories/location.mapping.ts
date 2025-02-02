@@ -10,7 +10,7 @@ type LocationCreateInput = {
 export function mapDtoToModelCreate(dto: CreateLocationDto): LocationCreateInput {
     return {
         location: {
-            geoType: 'Point',
+            type: 'Point',
             coordinates: [dto.longitude, dto.latitude],
         },
         name: dto.name,
@@ -25,7 +25,7 @@ export function mapDtoToModelUpdate(dto: UpdateLocationDto): LocationUpdateInput
     return {
         ...(dto.longitude !== undefined && dto.latitude !== undefined && {
             location: {
-                geoType: 'Point',
+                type: 'Point',
                 coordinates: [dto.longitude, dto.latitude],
             },
         }),

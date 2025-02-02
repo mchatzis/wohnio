@@ -1,4 +1,4 @@
-import mockLocationModel, { mockSave } from '@/weather/__test__/__mocks__/location.model.mock';
+import mockLocationModel, { mockSave } from '@/weather/__test__/location.model.mock';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Location } from '../schemas/location.schema';

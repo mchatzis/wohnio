@@ -3,14 +3,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { UpdateLocationDto } from '../dto/update-location.dto';
-import { Location } from '../schemas/location.schema';
+import { LocationDocument } from '../schemas/location.schema';
+import { mapDtoToModelCreate, mapDtoToModelUpdate } from './location.mapping';
+
 
 @Injectable()
 export class LocationRepository {
-    constructor(@InjectModel(Location.name) private locationModel: Model<Location>) { }
+    constructor(@InjectModel(LocationDocument.name) private locationModel: Model<LocationDocument>) { }
 
     create(createLocationDto: CreateLocationDto) {
-        const newLocation = new this.locationModel(createLocationDto);
+        const createLocationInput = mapDtoToModelCreate(createLocationDto);
+        const newLocation = new this.locationModel(createLocationInput);
         return newLocation.save();
     }
 
@@ -23,7 +26,10 @@ export class LocationRepository {
     }
 
     update(id: string, updateLocationDto: UpdateLocationDto) {
-        return this.locationModel.findByIdAndUpdate(id, updateLocationDto, { new: true }).exec();
+        const updateLocationInput = mapDtoToModelUpdate(updateLocationDto);
+        return this.locationModel
+            .findByIdAndUpdate(id, updateLocationInput, { new: true })
+            .exec();
     }
 
     delete(id: string) {

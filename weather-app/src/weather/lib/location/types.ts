@@ -1,3 +1,5 @@
+type GeoJSONType = "FeatureCollection" | "Feature" | "Point";
+
 interface GeoJSON {
     media_type: string;
     type: "FeatureCollection";

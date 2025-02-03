@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { UpdateLocationDto } from '../dto/update-location.dto';
 import { fetchWeatherData } from '../lib/location/helpers';
 import { LocationRepository } from '../repositories/location.repository';
+import { mapGeoJsonToMetricBatch } from '../repositories/metric.mapping';
+import { WeatherMetricDocument } from '../schemas/metric.schema';
 
 @Injectable()
 export class LocationService {
-  constructor(private locationRepository: LocationRepository) { }
+  constructor(
+    private locationRepository: LocationRepository,
+    @InjectModel(WeatherMetricDocument.name) private weatherMetricModel: Model<WeatherMetricDocument>
+  ) { }
 
   async create(createLocationDto: CreateLocationDto) {
-    // Query weather api
-    const weatherData = await fetchWeatherData({
+    const createdLocation = await this.locationRepository.create(createLocationDto);
+    const weatherData: GeoJSON = await fetchWeatherData({
       location: {
-        latitude: 48.206248,
-        longitude: 16.367569
+        latitude: createLocationDto.latitude,
+        longitude: createLocationDto.longitude
       },
       days: 1
     });
-    // Store weather data
-    // Store location and return it
-    const savedLocation = this.locationRepository.create(createLocationDto);
-    return savedLocation
+    const processedWeatherData = mapGeoJsonToMetricBatch(weatherData, createdLocation._id.toString());
+    const success = await this.weatherMetricModel.insertMany(processedWeatherData);
+
+    return createdLocation
   }
 
   findAll() {

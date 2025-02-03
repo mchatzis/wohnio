@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { UpdateLocationDto } from '../dto/update-location.dto';
 import { LocationDocument } from '../schemas/location.schema';
-import { mapDtoToModelCreate, mapDtoToModelUpdate } from './location.mapping';
+import { mapDtoToModelUpdate, mapDtoToModelCreate as mapDtoToNewLocationInput } from './location.mapping';
 
 
 @Injectable()
@@ -12,7 +12,7 @@ export class LocationRepository {
     constructor(@InjectModel(LocationDocument.name) private locationModel: Model<LocationDocument>) { }
 
     create(createLocationDto: CreateLocationDto) {
-        const createLocationInput = mapDtoToModelCreate(createLocationDto);
+        const createLocationInput = mapDtoToNewLocationInput(createLocationDto);
         const newLocation = new this.locationModel(createLocationInput);
         return newLocation.save();
     }

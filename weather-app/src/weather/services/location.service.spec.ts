@@ -1,9 +1,17 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { LocationRepository } from '../repositories/location.repository';
+import { WeatherMetricDocument } from '../schemas/metric.schema';
 import { LocationService } from './location.service';
 
 jest.mock('../repositories/location.repository');
+jest.mock('../lib/location/helpers', () => ({
+  fetchWeatherData: jest.fn()
+}));
+jest.mock('../repositories/metric.mapping', () => ({
+  mapGeoJsonToMetricBatch: jest.fn()
+}));
 
 describe('LocationService', () => {
   let service: LocationService;
@@ -22,9 +30,21 @@ describe('LocationService', () => {
     name: mockLocation.name
   };
 
+  const mockInsertMany = jest.fn();
+  const mockWeatherMetricModel = jest.fn().mockImplementation(() => ({
+    insertMany: mockInsertMany
+  }));
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LocationRepository, LocationService],
+      providers: [
+        LocationRepository,
+        LocationService,
+        {
+          provide: getModelToken(WeatherMetricDocument.name),
+          useValue: mockWeatherMetricModel,
+        },
+      ],
     }).compile();
 
     service = module.get<LocationService>(LocationService);

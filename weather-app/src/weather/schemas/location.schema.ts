@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type Location = {
     type: 'Point';
     coordinates: [longitude: number, latitude: number];
 }
 
-// Had to split the schemas, otherwise @Prop gets confused because of geojson property 
-// named "type", hence confusing the decorator logic
+// Had to split the two schemas, otherwise @Prop confuses mongodb geojson property 
+// "type" with Prop's special object key "type"
 @Schema({ _id: false })
 class LocationEntity {
     @Prop({
@@ -26,8 +26,10 @@ class LocationEntity {
 const LocationSchema = SchemaFactory.createForClass(LocationEntity);
 
 
-@Schema()
+@Schema({ collection: 'locations' })
 export class LocationDocument extends Document {
+    _id: Types.ObjectId;
+
     @Prop({
         type: LocationSchema,
         required: true

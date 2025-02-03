@@ -16,7 +16,7 @@ interface Feature {
 
 interface Geometry {
     type: "Point";
-    coordinates: number[];
+    coordinates: [number, number];
 }
 
 interface Properties {

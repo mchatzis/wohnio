@@ -5,6 +5,7 @@
     - Valid latitude values are between -90 and 90, both inclusive.
 [ ] Error handling
 [ ] Add location id index (due to high access frequency)
+[ ] Allow query parameter for defining how many days to the past for historical data
 [ ] env vars in .env
 [ ] Find location in range / near
 [ ] Weather API: Check for duplicates??? Remove them??? (In general, data validation of api data)

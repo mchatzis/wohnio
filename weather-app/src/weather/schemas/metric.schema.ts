@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type WeatherMetric = Pick<WeatherMetricDocument, 'timestamp' | 'metadata' | "value">;
 @Schema({
     collection: 'inca_historical',
     timeseries: {
@@ -31,3 +30,5 @@ export class WeatherMetricDocument extends Document {
 }
 
 export const WeatherMetricSchema = SchemaFactory.createForClass(WeatherMetricDocument);
+
+export type WeatherMetric = Pick<WeatherMetricDocument, 'timestamp' | 'metadata' | "value">;

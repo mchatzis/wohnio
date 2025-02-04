@@ -1,6 +1,4 @@
-import { InternalServerErrorException } from "@nestjs/common";
 import { format, subDays } from "date-fns";
-import { isGeoJSON } from "./type-guards";
 
 /**
  * @param days Days to go back for start time
@@ -33,9 +31,6 @@ export async function fetchWeatherData({ location, days }: fetchWeatherDataParam
     const url = `${baseUrl}?${params.toString()}`;
 
     const weather_data = await fetch(url).then(res => res.json());
-    if (!isGeoJSON(weather_data)) {
-        throw new InternalServerErrorException("Weather api returned invalid data.")
-    }
 
     return weather_data;
 };

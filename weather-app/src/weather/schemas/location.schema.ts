@@ -1,13 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-export type Location = {
-    type: 'Point';
-    coordinates: [longitude: number, latitude: number];
-}
 
-// Had to split the two schemas, otherwise @Prop confuses mongodb geojson property 
-// "type" with Prop's special object key "type"
+// Had to split the two schemas, otherwise @Prop confuses mongodb's geojson property "type"
+// with Prop's special key named "type"
 @Schema({ _id: false })
 class LocationEntity {
     @Prop({
@@ -15,15 +11,16 @@ class LocationEntity {
         enum: ['Point'],
         required: true
     })
-    type: string;
+    type: 'Point';
 
     @Prop({
         type: [Number],
         required: true
     })
-    coordinates: number[];
+    coordinates: [longitude: number, latitude: number];
 }
 const LocationSchema = SchemaFactory.createForClass(LocationEntity);
+export type Location = Pick<LocationEntity, 'type' | 'coordinates'>;
 
 
 @Schema({ collection: 'locations' })
@@ -34,10 +31,12 @@ export class LocationDocument extends Document {
         type: LocationSchema,
         required: true
     })
-    location: Location;
+    location: Pick<LocationEntity, 'type' | 'coordinates'>;
 
     @Prop()
     name?: string;
 }
 
 export const LocationDocumentSchema = SchemaFactory.createForClass(LocationDocument);
+export type LocationModel = Pick<LocationDocument, '_id' | 'location' | 'name'>;
+

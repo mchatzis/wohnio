@@ -4,6 +4,7 @@ import { BadRequestException, HttpCode, Injectable, InternalServerErrorException
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateLocationDto } from '../dto/create-location.dto';
+import { GeoSpatialFiltersDto } from '../dto/find-geo-filters.dto';
 import { UpdateLocationDto } from '../dto/update-location.dto';
 import { LocationRepository } from '../repositories/location.repository';
 import { mapGeoJsonToMetricDataBatch } from '../repositories/metric.mapping';
@@ -54,6 +55,10 @@ export class LocationService {
     return this.locationRepository.findById(id);
   }
 
+  findWithGeoFilters(geoSpatialFiltersDto: GeoSpatialFiltersDto) {
+    return this.locationRepository.findWithGeoFilters(geoSpatialFiltersDto);
+  }
+
   async findHistoricalTemperatures(id: string, startTime?: Date, endTime?: Date) {
     const location = await this.locationRepository.findById(id);
     if (!location) {
@@ -61,7 +66,7 @@ export class LocationService {
     }
 
     const query: any = {
-      "metadata.locationId": location._id.toString()
+      "metadata.locationId": id
     };
     if (startTime || endTime) {
       query.timestamp = {};
@@ -73,7 +78,7 @@ export class LocationService {
       }
     }
 
-    return await this.weatherMetricModel.find(query);
+    return this.weatherMetricModel.find(query);
   }
 
   update(id: string, updateLocationDto: UpdateLocationDto) {

@@ -40,3 +40,6 @@ export class LocationDocument extends Document {
 export const LocationDocumentSchema = SchemaFactory.createForClass(LocationDocument);
 export type LocationModel = Pick<LocationDocument, '_id' | 'location' | 'name'>;
 
+
+LocationDocumentSchema.index({ "location.coordinates.0": 1, "location.coordinates.1": 1 }, { unique: true });
+LocationDocumentSchema.index({ location: "2dsphere" });

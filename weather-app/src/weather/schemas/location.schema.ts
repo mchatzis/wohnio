@@ -33,7 +33,9 @@ export class LocationDocument extends Document {
     })
     location: Pick<LocationEntity, 'type' | 'coordinates'>;
 
-    @Prop()
+    @Prop({
+        type: String
+    })
     name?: string;
 }
 

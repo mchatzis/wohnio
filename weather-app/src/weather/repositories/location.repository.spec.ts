@@ -1,6 +1,7 @@
 import mockLocationModel, { mockSave } from '@/weather/__test__/location.model.mock';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { LocationDocument } from '../schemas/location.schema';
 import { LocationRepository } from './location.repository';
 

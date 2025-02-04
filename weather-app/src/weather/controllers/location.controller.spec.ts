@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CreateLocationDto } from '../dto/create-location.dto';
 import { LocationService } from '../services/location.service';
 import { LocationController } from './location.controller';
 
-jest.mock('../services/location.service');
+
+vi.mock('../services/location.service');
 
 describe('LocationController', () => {
   let controller: LocationController;
@@ -32,7 +34,7 @@ describe('LocationController', () => {
   });
 
   it('should call service.create with correct data', async () => {
-    const createSpy = jest.spyOn(service, 'create');
+    const createSpy = vi.spyOn(service, 'create');
 
     await controller.create(mockLocationDto);
     expect(createSpy).toHaveBeenCalledWith(mockLocationDto);

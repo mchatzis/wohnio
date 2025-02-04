@@ -34,8 +34,6 @@ services:
       - "3000:3000"
     environment:
       - MONGODB_URI=mongodb://root:example@mongo:27017/
-    volumes:
-      - ./weather-app:/usr/src/app
     depends_on:
       mongo:
         condition: service_healthy

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { isGeoJSON } from "./type-guards";
 
 describe('GeoJSON type guards', () => {

@@ -1,4 +1,5 @@
 import { InternalServerErrorException } from "@nestjs/common";
+import { describe, expect, it } from "vitest";
 import { mapGeoJsonToMetricDataBatch } from "./metric.mapping";
 
 describe('mapGeoJsonToMetric', () => {

@@ -1,12 +1,12 @@
-import { isGeoJSON } from "@/weather/lib/location/type-guards";
 import { format, subDays } from "date-fns";
+import { describe, expect, it, vi } from "vitest";
 import { fetchWeatherData, getTimeRangeStrings } from "./helpers";
 
 describe("location helpers", () => {
     describe("getTimeRangeStrings", () => {
         it("returns the correct start and end dates given a number of days", () => {
             const fixedDate = new Date("2023-06-15T12:00:00Z");
-            jest.useFakeTimers().setSystemTime(fixedDate);
+            vi.useFakeTimers().setSystemTime(fixedDate);
 
             const days = 7;
             const [start, end] = getTimeRangeStrings(days);
@@ -17,7 +17,7 @@ describe("location helpers", () => {
             expect(end).toBe(expectedEnd);
             expect(start).toBe(expectedStart);
 
-            jest.useRealTimers();
+            vi.useRealTimers();
         });
     });
 
@@ -27,7 +27,6 @@ describe("location helpers", () => {
             const days = 1;
 
             const weather_data = await fetchWeatherData({ location, days });
-            console.log(isGeoJSON(weather_data))
             expect(2).toBe(2);
         });
     });

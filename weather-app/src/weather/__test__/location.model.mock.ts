@@ -1,11 +1,13 @@
-const mockSave = jest.fn();
-const mockLocationModel = jest.fn().mockImplementation(() => ({
-    find: jest.fn(),
-    findById: jest.fn(),
-    findByIdAndUpdate: jest.fn(),
-    findByIdAndDelete: jest.fn(),
+import { vi } from "vitest";
+
+const mockSave = vi.fn();
+const mockLocationModel = vi.fn().mockImplementation(() => ({
+    find: vi.fn(),
+    findById: vi.fn(),
+    findByIdAndUpdate: vi.fn(),
+    findByIdAndDelete: vi.fn(),
     save: mockSave,
-    exec: jest.fn(),
+    exec: vi.fn(),
 }));
 
 export {

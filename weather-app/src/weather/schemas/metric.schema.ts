@@ -10,7 +10,10 @@ import { Document } from 'mongoose';
     }
 })
 export class WeatherMetricDocument extends Document {
-    @Prop({ required: true })
+    @Prop({
+        type: Date,
+        required: true
+    })
     timestamp: Date;
 
     @Prop({
@@ -25,7 +28,10 @@ export class WeatherMetricDocument extends Document {
         metricName: string;
     };
 
-    @Prop({ required: true })
+    @Prop({
+        type: Number,
+        required: true
+    })
     value: number;
 }
 

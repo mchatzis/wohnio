@@ -4,11 +4,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ApiModule } from './api.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import config from './config';
 import { routes } from './routes';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://root:example@mongo:27017/weather-db?authSource=admin'),
+    MongooseModule.forRoot(config.MONGODB_URI),
     ApiModule,
     RouterModule.register(routes)
   ],

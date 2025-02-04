@@ -30,5 +30,7 @@ export class WeatherMetricDocument extends Document {
 }
 
 export const WeatherMetricSchema = SchemaFactory.createForClass(WeatherMetricDocument);
-
 export type WeatherMetric = Pick<WeatherMetricDocument, 'timestamp' | 'metadata' | "value">;
+
+
+WeatherMetricSchema.index({ "metadata.locationId": 1, timestamp: -1 });

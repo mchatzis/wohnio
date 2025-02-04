@@ -1,5 +1,5 @@
 import { InternalServerErrorException } from "@nestjs/common";
-import { mapGeoJsonToMetricBatch } from "./metric.mapping";
+import { mapGeoJsonToMetricDataBatch } from "./metric.mapping";
 
 describe('mapGeoJsonToMetric', () => {
     const validGeoJSON: GeoJSON = {
@@ -37,7 +37,7 @@ describe('mapGeoJsonToMetric', () => {
         const expectedTimestamps = validGeoJSON.timestamps.map(ts => new Date(ts));
         const expectedValues = validGeoJSON.features[0].properties.parameters['T2M'].data;
 
-        const result = mapGeoJsonToMetricBatch(validGeoJSON, testLocationId);
+        const result = mapGeoJsonToMetricDataBatch(validGeoJSON, testLocationId);
 
         expect(result).toHaveLength(4);
         result.forEach((dataPoint, index) => {
@@ -61,7 +61,7 @@ describe('mapGeoJsonToMetric', () => {
         };
 
         expect(() => {
-            mapGeoJsonToMetricBatch(invalidGeoJSON, testLocationId);
+            mapGeoJsonToMetricDataBatch(invalidGeoJSON, testLocationId);
         }).toThrow(InternalServerErrorException);
     });
 })

@@ -1,8 +1,8 @@
-import { BadRequestException, HttpCode, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { CreateMetricDto } from "../dto/create-metric.dto";
-import { fetchWeatherData } from "../lib/location/helpers";
+import { fetchWeatherData, filterDuplicates } from "../lib/location/helpers";
 import { isGeoJSON } from "../lib/location/type-guards";
 import { LocationRepository } from "../repositories/location.repository";
 import { mapGeoJsonToMetricDataBatch } from "../repositories/metric.mapping";
@@ -15,8 +15,7 @@ export class MetricService {
         @InjectModel(WeatherMetricDocument.name) private weatherMetricModel: Model<WeatherMetricDocument>
     ) { }
 
-    @HttpCode(201)
-    async storeMetricData(createMetricDto: CreateMetricDto): Promise<void> {
+    async storeMetricData(createMetricDto: CreateMetricDto) {
         const { locationId, from, to } = createMetricDto;
         const location = await this.locationRepository.findById(locationId);
         if (!location) {
@@ -34,6 +33,13 @@ export class MetricService {
         console.log(weatherData)
 
         const batch = mapGeoJsonToMetricDataBatch(weatherData, location._id.toString());
-        await this.weatherMetricModel.insertMany(batch);
+
+        const filteredBatch = await filterDuplicates(batch, location._id.toString(), this.weatherMetricModel);
+
+        await this.weatherMetricModel.insertMany(filteredBatch, { ordered: false });
+
+        return {
+            insertedCount: filteredBatch.length
+        };
     }
 }

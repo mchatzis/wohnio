@@ -1,3 +1,6 @@
+import { WeatherMetric, WeatherMetricDocument } from "@/weather/schemas/metric.schema";
+import { Model } from "mongoose";
+
 interface fetchWeatherDataParams {
     latitude: number;
     longitude: number;
@@ -23,3 +26,31 @@ export async function fetchWeatherData({ latitude, longitude, startTime, endTime
 
     return weather_data;
 };
+
+/**
+ * Filters out documents from the batch that have timestamps already present in the DB for the given location.
+ * @param batch - The batch of metric documents to insert.
+ * @param locationId - The location id associated with the documents.
+ * @param metricModel - The Mongoose model for the time-series collection.
+ * @returns The filtered batch containing only new documents.
+ */
+export async function filterDuplicates(
+    batch: WeatherMetric[],
+    locationId: string,
+    metricModel: Model<WeatherMetricDocument>
+): Promise<WeatherMetric[]> {
+    const timestamps = batch.map(doc => doc.timestamp);
+
+    const existingDocs = await metricModel.find(
+        {
+            'metadata.locationId': locationId,
+            timestamp: { $in: timestamps },
+        },
+        { timestamp: 1 }
+    ).lean();
+
+    const existingTimestamps = new Set(existingDocs.map(doc => new Date(doc.timestamp).getTime()));
+
+    return batch.filter(doc => !existingTimestamps.has(doc.timestamp.getTime()));
+}
+

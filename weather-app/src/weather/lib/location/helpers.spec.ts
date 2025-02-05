@@ -1,33 +1,24 @@
-import { format, subDays } from "date-fns";
-import { describe, expect, it, vi } from "vitest";
-import { fetchWeatherData, getTimeRangeStrings } from "./helpers";
+import { addHours } from "date-fns";
+import { describe, expect, it } from "vitest";
+import { fetchWeatherData } from "./helpers";
+import { isGeoJSON } from "./type-guards";
 
 describe("location helpers", () => {
-    describe("getTimeRangeStrings", () => {
-        it("returns the correct start and end dates given a number of days", () => {
-            const fixedDate = new Date("2023-06-15T12:00:00Z");
-            vi.useFakeTimers().setSystemTime(fixedDate);
-
-            const days = 7;
-            const [start, end] = getTimeRangeStrings(days);
-
-            const expectedEnd = format(fixedDate, "yyyy-MM-dd");
-            const expectedStart = format(subDays(fixedDate, days), "yyyy-MM-dd");
-
-            expect(end).toBe(expectedEnd);
-            expect(start).toBe(expectedStart);
-
-            vi.useRealTimers();
-        });
-    });
-
     describe("fetchWeatherData", () => {
         it("logs an encoded URL with the expected query parameters", async () => {
-            const location = { latitude: 48.206248, longitude: 16.367569 };
-            const days = 1;
+            const startTime = new Date("2025-01-01T12:00:00Z");
 
-            const weather_data = await fetchWeatherData({ location, days });
-            expect(2).toBe(2);
+            const vienna = { latitude: 48.206248, longitude: 16.367569 };
+            const weather_data = await fetchWeatherData({
+                latitude: vienna.latitude,
+                longitude: vienna.longitude,
+                startTime: startTime,
+                endTime: addHours(startTime, 1)
+            });
+            console.log(weather_data)
+
+            expect(isGeoJSON(weather_data)).toBeTruthy();
+            expect(weather_data.timestamps.length).toBe(2);
         });
     });
 });

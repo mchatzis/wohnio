@@ -16,3 +16,4 @@ Here's the corrected markdown:
     - multiple weather metrics (not only T2M)
     -
 - [ ] Put MongoDB models into their own class instead of using @InjectModel to inject them (will make mocking easier?)
+- [ ] Why is db called 'test' now?

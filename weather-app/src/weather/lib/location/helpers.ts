@@ -1,30 +1,19 @@
-import { format, subDays } from "date-fns";
-
-/**
- * @param days Days to go back for start time
- * @returns [start, end] in string format
- */
-export function getTimeRangeStrings(days: number) {
-    const end = format(new Date(), "yyyy-MM-dd");
-    const start = format(subDays(new Date(), days), "yyyy-MM-dd");
-    return [start, end];
-}
-
 interface fetchWeatherDataParams {
-    location: {
-        latitude: number;
-        longitude: number;
-    };
-    days: number;
+    latitude: number;
+    longitude: number;
+    startTime: Date;
+    endTime: Date;
 }
-export async function fetchWeatherData({ location, days }: fetchWeatherDataParams) {
+export async function fetchWeatherData({ latitude, longitude, startTime, endTime }: fetchWeatherDataParams) {
     const baseUrl = 'https://dataset.api.hub.geosphere.at/v1/timeseries/historical/inca-v1-1h-1km';
-    const [startTime, endTime] = getTimeRangeStrings(days);
+    const formattedStart = startTime.toISOString().slice(0, 16);
+    const formattedEnd = endTime.toISOString().slice(0, 16);
+
     const params = new URLSearchParams({
         parameters: 'T2M',
-        start: startTime,
-        end: endTime,
-        lat_lon: `${location.latitude},${location.longitude}`,
+        start: formattedStart,
+        end: formattedEnd,
+        lat_lon: `${latitude},${longitude}`,
         output_format: 'geojson'
     });
 

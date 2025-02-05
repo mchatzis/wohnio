@@ -14,7 +14,7 @@ export class TimeRangeDto {
     to: Date;
 }
 
-export class CreateMetricParams {
+export class MongoIdParams {
     @ApiProperty({ description: 'MongoDB ObjectId (24 hex characters)' })
     @IsMongoId()
     @IsNotEmpty()

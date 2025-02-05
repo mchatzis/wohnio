@@ -23,12 +23,12 @@ type LocationUpdateInput = {
 };
 export function mapDtoToModelUpdate(dto: UpdateLocationDto): LocationUpdateInput {
     return {
-        ...(dto.longitude !== undefined && dto.latitude !== undefined && {
+        ...{
             location: {
                 type: 'Point',
                 coordinates: [dto.longitude, dto.latitude],
             },
-        }),
+        },
         ...(dto.name !== undefined && {
             name: dto.name,
         })

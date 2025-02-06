@@ -15,3 +15,10 @@ Here's the corrected markdown:
 - [ ] Why is db called 'test' now?
 - [ ] How would you extend to include:
     - multiple weather metrics (not only T2M)
+
+LLM suggestions:
+- Manual Response Injection: In createMetric, the controller uses the Express response (@Res() response) instead of relying on NestJS's built-in response handling.
+Alternative: Remove manual response handling to let Nest handle responses and errors consistently.
+- Incomplete Error Checks:
+The fetchWeatherData function doesn’t check the HTTP response status before parsing JSON, which might lead to unhandled errors when the external API fails.
+The mapping function (mapGeoJsonToMetricDataBatch) assumes that geoData.features contains at least one element. Adding a check for empty features would make it more robust.
